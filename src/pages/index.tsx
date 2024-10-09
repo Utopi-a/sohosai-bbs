@@ -1,4 +1,5 @@
 import { api, type RouterOutputs } from "@/utils/api";
+import Head from "next/head";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -36,146 +37,153 @@ export default function Home() {
   };
 
   return (
-    <div
-      style={{
-        width: "100%",
-        minHeight: "100vh",
-        backgroundColor: "#efefef",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+    <>
+      <Head>
+        <title>驚額の掲示板</title>
+        <meta name="description" content="驚額の掲示板へようこそんぽ。ここでみんなでお話するんぽ～～！" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
       <div
         style={{
           width: "100%",
-          flex: "1 0 auto",
+          minHeight: "100vh",
+          backgroundColor: "#efefef",
           display: "flex",
-          justifyContent: "center",
+          flexDirection: "column",
         }}
       >
         <div
           style={{
-            fontFamily: '"MS PGothic", "Meiryo", sans-serif',
-            padding: "10px",
             width: "100%",
-            maxWidth: "800px",
+            flex: "1 0 auto",
+            display: "flex",
+            justifyContent: "center",
           }}
         >
-          <h1
+          <div
             style={{
-              fontSize: "24px",
-              fontWeight: "normal",
-              borderLeft: "solid 6px #1e90ff",
-              paddingLeft: "5px",
-            }}
-          >
-            驚額の掲示板
-          </h1>
-          <p>ここは驚額の掲示板そぽ。 いっぱいお話するそぽ～</p>
-          <form
-            onSubmit={handleSubmit}
-            style={{
-              marginBottom: "20px",
+              fontFamily: '"MS PGothic", "Meiryo", sans-serif',
               padding: "10px",
-              backgroundColor: "#dddddd",
+              width: "100%",
+              maxWidth: "800px",
             }}
           >
-            <div>
-              名前んぽ (省略できるんぽ) :
-              <br />
-              <input
-                type="text"
-                value={author}
-                onChange={(e) => setAuthor(e.target.value)}
-                style={{
-                  width: "200px",
-                  marginBottom: "5px",
-                }}
-              />
-            </div>
-            <div>
-              内容んぽ:
-              <br />
-              <textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                rows={5}
-                style={{
-                  width: "100%",
-                  marginBottom: "5px",
-                }}
-              ></textarea>
-            </div>
-            <div>
-              <input
-                type="submit"
-                value="書き込むんぽ～"
-                style={{
-                  backgroundColor: "#efefef",
-                  border: "1px solid #999999",
-                  padding: "3px 10px",
-                }}
-              />
-            </div>
-            {error && <div style={{ color: "red" }}>{error}</div>}
-          </form>
-          <div>
-            <table
+            <h1
               style={{
-                width: "100%",
-                borderCollapse: "collapse",
+                fontSize: "24px",
+                fontWeight: "normal",
+                borderLeft: "solid 6px #1e90ff",
+                paddingLeft: "5px",
               }}
             >
-              <tbody>
-                {messages
-                  .slice()
-                  .reverse()
-                  .map((message, index) => (
-                    <tr
-                      key={message.id}
-                      style={{
-                        border: "1px solid #cccccc",
-                        backgroundColor: "#ffffff",
-                      }}
-                    >
-                      <td
+              驚額の掲示板
+            </h1>
+            <p>ここは驚額の掲示板そぽ。 いっぱいお話するそぽ～</p>
+            <form
+              onSubmit={handleSubmit}
+              style={{
+                marginBottom: "20px",
+                padding: "10px",
+                backgroundColor: "#dddddd",
+              }}
+            >
+              <div>
+                名前んぽ (省略できるんぽ) :
+                <br />
+                <input
+                  type="text"
+                  value={author}
+                  onChange={(e) => setAuthor(e.target.value)}
+                  style={{
+                    width: "200px",
+                    marginBottom: "5px",
+                  }}
+                />
+              </div>
+              <div>
+                内容んぽ:
+                <br />
+                <textarea
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  rows={5}
+                  style={{
+                    width: "100%",
+                    marginBottom: "5px",
+                  }}
+                ></textarea>
+              </div>
+              <div>
+                <input
+                  type="submit"
+                  value="書き込むんぽ～"
+                  style={{
+                    backgroundColor: "#efefef",
+                    border: "1px solid #999999",
+                    padding: "3px 10px",
+                  }}
+                />
+              </div>
+              {error && <div style={{ color: "red" }}>{error}</div>}
+            </form>
+            <div>
+              <table
+                style={{
+                  width: "100%",
+                  borderCollapse: "collapse",
+                }}
+              >
+                <tbody>
+                  {messages
+                    .slice()
+                    .reverse()
+                    .map((message, index) => (
+                      <tr
+                        key={message.id}
                         style={{
-                          padding: "10px",
-                          verticalAlign: "top",
+                          border: "1px solid #cccccc",
+                          backgroundColor: "#ffffff",
                         }}
                       >
-                        <span style={{ color: "#008000" }}>{messages.length - index}</span>
-                        <span style={{ color: "#0000ff" }}> 名前：</span>
-                        <span style={{ color: "#008000", fontWeight: "bold" }}>{message.author}</span>
-                        <span style={{ color: "#0000ff" }}> 投稿日：</span>
-                        <span>{new Date(message.createdAt).toLocaleString("ja-JP")}</span>
-                        <br />
-                        <span
+                        <td
                           style={{
-                            whiteSpace: "pre-wrap",
-                            fontFamily: "monospace",
+                            padding: "10px",
+                            verticalAlign: "top",
                           }}
                         >
-                          {message.content}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
+                          <span style={{ color: "#008000" }}>{messages.length - index}</span>
+                          <span style={{ color: "#0000ff" }}> 名前：</span>
+                          <span style={{ color: "#008000", fontWeight: "bold" }}>{message.author}</span>
+                          <span style={{ color: "#0000ff" }}> 投稿日：</span>
+                          <span>{new Date(message.createdAt).toLocaleString("ja-JP")}</span>
+                          <br />
+                          <span
+                            style={{
+                              whiteSpace: "pre-wrap",
+                              fontFamily: "monospace",
+                            }}
+                          >
+                            {message.content}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
+        <footer
+          style={{
+            padding: "1rem 0",
+            textAlign: "center",
+            marginTop: "2rem",
+            flexShrink: 0,
+          }}
+        >
+          <p>やきそばマイスター</p>
+        </footer>
       </div>
-      <footer
-        style={{
-          padding: "1rem 0",
-          textAlign: "center",
-          marginTop: "2rem",
-          flexShrink: 0,
-        }}
-      >
-        <p>やきそばマイスター</p>
-      </footer>
-    </div>
+    </>
   );
 }
