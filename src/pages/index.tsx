@@ -47,7 +47,7 @@ export default function Home() {
         style={{
           width: "100%",
           minHeight: "100vh",
-          backgroundColor: "#efefef",
+          backgroundColor: "#000000",
           display: "flex",
           flexDirection: "column",
         }}
@@ -72,13 +72,14 @@ export default function Home() {
               style={{
                 fontSize: "24px",
                 fontWeight: "normal",
-                borderLeft: "solid 6px #1e90ff",
+                borderLeft: "solid 6px #ffd702",
                 paddingLeft: "5px",
+                color: "#ffffff",
               }}
             >
               驚額の掲示板
             </h1>
-            <p>ここは驚額の掲示板そぽ。 いっぱいお話するそぽ～</p>
+            <p style={{ color: "#ffffff" }}>ここは驚額の掲示板そぽ。 いっぱいお話するそぽ～</p>
             <form
               onSubmit={handleSubmit}
               style={{
