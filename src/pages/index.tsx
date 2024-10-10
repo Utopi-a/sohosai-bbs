@@ -182,7 +182,13 @@ export default function Home() {
             flexShrink: 0,
           }}
         >
-          <p>やきそばマイスター</p>
+          <p
+            style={{
+              color: "#ffffff",
+            }}
+          >
+            やきそばマイスター
+          </p>
         </footer>
       </div>
     </>
