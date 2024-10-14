@@ -79,7 +79,7 @@ export default function Home() {
             >
               驚額の掲示板
             </h1>
-            <p style={{ color: "#ffffff" }}>ここは驚額の掲示板そぽ。 いっぱいお話するそぽ～</p>
+            <p style={{ color: "#ffffff" }}>ここは驚額の掲示板んぽ。 いっぱいお話するんぽ～</p>
             <form
               onSubmit={handleSubmit}
               style={{
