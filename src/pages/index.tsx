@@ -31,6 +31,11 @@ export default function Home() {
       return;
     }
 
+    if (author.length > 10) {
+      setError("名前は10文字以内で入力するんぽ。");
+      return;
+    }
+
     const newMessage = {
       id: Date.now(),
       author: author || "風吹けばんぽたそ",
