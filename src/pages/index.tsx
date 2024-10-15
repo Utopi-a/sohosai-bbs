@@ -1,17 +1,33 @@
 import { NG_WORDS } from "@/features/const/NG_WORDS";
-import { api, type RouterOutputs } from "@/utils/api";
+import { api } from "@/utils/api";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 export default function Home() {
+  const utils = api.useUtils();
   const getAllMessagesApi = api.message.getMessages.useQuery();
-  const createMessageApi = api.message.createMessage.useMutation({ onSuccess: () => getAllMessagesApi.refetch });
-  const [messages, setMessages] = useState<RouterOutputs["message"]["getMessages"]>([]);
-
-  useEffect(() => {
-    if (getAllMessagesApi.data) {
-      setMessages(getAllMessagesApi.data);
-    }
-  }, [getAllMessagesApi.data]);
+  const createMessageApi = api.message.createMessage.useMutation({
+    async onMutate(newPost) {
+      await utils.message.getMessages.cancel();
+      const previousMessages = utils.message.getMessages.getData();
+      utils.message.getMessages.setData(undefined, (prev) => [
+        {
+          id: Date.now(),
+          author: newPost.author ?? "風吹けばんぽたそ",
+          content: newPost.content,
+          createdAt: new Date(),
+        },
+        ...(prev ?? []),
+      ]);
+      return { previousMessages };
+    },
+    onError(error, _, ctx) {
+      utils.message.getMessages.setData(undefined, ctx?.previousMessages);
+    },
+    onSettled() {
+      void utils.message.getMessages.invalidate();
+    },
+    onSuccess: () => getAllMessagesApi.refetch,
+  });
 
   const [author, setAuthor] = useState("");
   const [content, setContent] = useState("");
@@ -41,14 +57,7 @@ export default function Home() {
       return;
     }
 
-    const newMessage = {
-      id: Date.now(),
-      author: author || "風吹けばんぽたそ",
-      content,
-      createdAt: new Date(),
-    };
     createMessageApi.mutate({ content, author });
-    setMessages((prevMessages) => [newMessage, ...prevMessages]);
     setAuthor("");
     setContent("");
     setError("");
@@ -153,7 +162,7 @@ export default function Home() {
                 }}
               >
                 <tbody>
-                  {messages.map((message, index) => (
+                  {getAllMessagesApi.data?.map((message, index) => (
                     <tr
                       key={message.id}
                       style={{
@@ -167,7 +176,7 @@ export default function Home() {
                           verticalAlign: "top",
                         }}
                       >
-                        <span style={{ color: "#008000" }}>{messages.length - index}</span>
+                        <span style={{ color: "#008000" }}>{getAllMessagesApi.data.length - index}</span>
                         <span style={{ color: "#0000ff" }}> 名前：</span>
                         <span style={{ color: "#008000", fontWeight: "bold" }}>{message.author}</span>
                         <span style={{ color: "#0000ff" }}> 投稿日：</span>
