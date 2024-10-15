@@ -36,6 +36,11 @@ export default function Home() {
       return;
     }
 
+    if (content.length > 1000) {
+      setError("内容は1000文字以内で入力するんぽ。");
+      return;
+    }
+
     const newMessage = {
       id: Date.now(),
       author: author || "風吹けばんぽたそ",
@@ -171,7 +176,10 @@ export default function Home() {
                         <span
                           style={{
                             whiteSpace: "pre-wrap",
+                            wordBreak: "break-all",
                             fontFamily: "monospace",
+                            display: "inline-block",
+                            maxWidth: "100%",
                           }}
                         >
                           {message.content}
