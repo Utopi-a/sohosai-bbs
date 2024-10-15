@@ -26,7 +26,6 @@ export default function Home() {
     onSettled() {
       void utils.message.getMessages.invalidate();
     },
-    onSuccess: () => getAllMessagesApi.refetch,
   });
 
   const [author, setAuthor] = useState("");
