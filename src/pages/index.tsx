@@ -30,7 +30,7 @@ export default function Home() {
       createdAt: new Date(),
     };
     createMessageApi.mutate({ content, author });
-    setMessages((prevMessages) => [...prevMessages, newMessage]);
+    setMessages((prevMessages) => [newMessage, ...prevMessages]);
     setAuthor("");
     setContent("");
     setError("");
