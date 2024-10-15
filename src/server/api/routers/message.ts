@@ -3,7 +3,11 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const messageRouter = createTRPCRouter({
   getMessages: publicProcedure.query(({ ctx }) => {
-    return ctx.db.message.findMany();
+    return ctx.db.message.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
   }),
 
   createMessage: publicProcedure

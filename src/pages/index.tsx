@@ -135,40 +135,37 @@ export default function Home() {
                 }}
               >
                 <tbody>
-                  {messages
-                    .slice()
-                    .reverse()
-                    .map((message, index) => (
-                      <tr
-                        key={message.id}
+                  {messages.map((message, index) => (
+                    <tr
+                      key={message.id}
+                      style={{
+                        border: "1px solid #cccccc",
+                        backgroundColor: "#ffffff",
+                      }}
+                    >
+                      <td
                         style={{
-                          border: "1px solid #cccccc",
-                          backgroundColor: "#ffffff",
+                          padding: "10px",
+                          verticalAlign: "top",
                         }}
                       >
-                        <td
+                        <span style={{ color: "#008000" }}>{messages.length - index}</span>
+                        <span style={{ color: "#0000ff" }}> 名前：</span>
+                        <span style={{ color: "#008000", fontWeight: "bold" }}>{message.author}</span>
+                        <span style={{ color: "#0000ff" }}> 投稿日：</span>
+                        <span>{new Date(message.createdAt).toLocaleString("ja-JP")}</span>
+                        <br />
+                        <span
                           style={{
-                            padding: "10px",
-                            verticalAlign: "top",
+                            whiteSpace: "pre-wrap",
+                            fontFamily: "monospace",
                           }}
                         >
-                          <span style={{ color: "#008000" }}>{messages.length - index}</span>
-                          <span style={{ color: "#0000ff" }}> 名前：</span>
-                          <span style={{ color: "#008000", fontWeight: "bold" }}>{message.author}</span>
-                          <span style={{ color: "#0000ff" }}> 投稿日：</span>
-                          <span>{new Date(message.createdAt).toLocaleString("ja-JP")}</span>
-                          <br />
-                          <span
-                            style={{
-                              whiteSpace: "pre-wrap",
-                              fontFamily: "monospace",
-                            }}
-                          >
-                            {message.content}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
+                          {message.content}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
