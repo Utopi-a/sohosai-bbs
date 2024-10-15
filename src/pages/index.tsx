@@ -1,7 +1,7 @@
+import { NG_WORDS } from "@/features/const/NG_WORDS";
 import { api, type RouterOutputs } from "@/utils/api";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-
 export default function Home() {
   const getAllMessagesApi = api.message.getMessages.useQuery();
   const createMessageApi = api.message.createMessage.useMutation({ onSuccess: () => getAllMessagesApi.refetch });
@@ -23,6 +23,14 @@ export default function Home() {
       setError("内容を入力しないと書き込めないんぽ……");
       return;
     }
+
+    // NGワードのチェック
+    const foundNgWord = NG_WORDS.find((word) => content.includes(word) || author.includes(word));
+    if (foundNgWord) {
+      setError(`使用できない言葉が含まれています。`);
+      return;
+    }
+
     const newMessage = {
       id: Date.now(),
       author: author || "風吹けばんぽたそ",
