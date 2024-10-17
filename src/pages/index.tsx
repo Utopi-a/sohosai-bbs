@@ -47,6 +47,9 @@ export default function Home() {
     const foundNgWord = NG_WORDS.find(
       (word) => removeInvisibleCharacterContent.includes(word) || removeInvisibleCharacterAuthor.includes(word)
     );
+
+    console.log(removeInvisibleCharacterContent);
+    console.log(removeInvisibleCharacterAuthor);
     if (foundNgWord) {
       setError(`使用できない言葉が含まれています。`);
       return;
