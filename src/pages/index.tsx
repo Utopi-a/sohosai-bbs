@@ -1,7 +1,9 @@
 import { NG_WORDS } from "@/features/const/NG_WORDS";
+import { removeInvisibleCharacters } from "@/features/utils";
 import { api } from "@/utils/api";
 import Head from "next/head";
 import { useState } from "react";
+
 export default function Home() {
   const utils = api.useUtils();
   const getAllMessagesApi = api.message.getMessages.useQuery();
@@ -40,7 +42,11 @@ export default function Home() {
     }
 
     // NGワードのチェック
-    const foundNgWord = NG_WORDS.find((word) => content.includes(word) || author.includes(word));
+    const removeInvisibleCharacterContent = removeInvisibleCharacters(content);
+    const removeInvisibleCharacterAuthor = removeInvisibleCharacters(author);
+    const foundNgWord = NG_WORDS.find(
+      (word) => removeInvisibleCharacterContent.includes(word) || removeInvisibleCharacterAuthor.includes(word)
+    );
     if (foundNgWord) {
       setError(`使用できない言葉が含まれています。`);
       return;

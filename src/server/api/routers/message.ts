@@ -1,4 +1,5 @@
 import { NG_WORDS } from "@/features/const/NG_WORDS";
+import { removeInvisibleCharacters } from "@/features/utils";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
@@ -14,23 +15,31 @@ export const messageRouter = createTRPCRouter({
   createMessage: publicProcedure
     .input(
       z.object({
-        author: z.string().max(10, "名前は10文字以内である必要があります").optional(),
+        author: z.string().max(10, "名前は10文字以内である必要があります"),
         content: z
           .string()
           .min(1, "内容は1文字以上である必要があります")
-          .max(1000, "内容は1000文字以内である必要があります")
-          .refine((value) => {
-            return !NG_WORDS.some((word) => value.includes(word));
-          }, "不適切な言葉が含まれています"),
+          .max(1000, "内容は1000文字以内である必要があります"),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      console.log(input);
+      const removeInvisibleCharacterContent = removeInvisibleCharacters(input.content);
+      const removeInvisibleCharacterAuthor = removeInvisibleCharacters(input.author);
+
+      const removeNGWords = (text: string): string => {
+        return NG_WORDS.reduce((cleanText, ngWord) => {
+          return cleanText.replace(new RegExp(ngWord, "gi"), "");
+        }, text);
+      };
+
+      const cleanContent = removeNGWords(removeInvisibleCharacterContent);
+      const cleanAuthor = removeNGWords(removeInvisibleCharacterAuthor);
+
       try {
         const createdMessage = await ctx.db.message.create({
           data: {
-            author: input.author !== "" ? input.author : "風吹けばんぽたそ",
-            content: input.content,
+            author: cleanAuthor !== "" ? cleanAuthor : "風吹けばんぽたそ",
+            content: cleanContent,
           },
         });
         return createdMessage;
